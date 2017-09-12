@@ -1,0 +1,69 @@
+<form  name="formulario" id="formulario" method="POST" action="order.php">
+ <input type="hidden" id="landing_page" name="landing_page" value="Goji_cream_long_ES">
+ <input type="text" id="token" name="token">
+ <select class="country" id="country" name="country">
+  <option value="ES">España</option>
+ </select>
+ <input name="nombre" id="nombre" placeholder="Nombre completo" style="margin-left: 6px;" type="text">
+ <input class="only_number" id="telefono" name="telefono" placeholder="Número de teléfono" type="text">
+ <div class="shipment_price" style="display: none;">Spedizione: 0 €
+                 </div>
+ <div class="total_price" style="display: none;">Prezzo totale: 39 €
+                 </div>
+ <a id="boton" class="green_btn js_pre_toform">Realizar pedido</a>
+</form>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+ cargarToken();
+$("#boton").on("touchend click", function (e) {
+enviar();
+}); 
+ function enviar(){
+  $("#boton").html("<img src='images/loader.gif'>");
+  $.ajax({
+    method: "POST",
+    url: "http://api.adceromoga.com/welcome/pantallaUno",
+    data: { 
+       landing_page: $("#landing_page").val(), 
+       country: $("#country").val(), 
+       nombre: $("#nombre").val(), 
+       telefono: $("#telefono").val(), 
+       token: $("#token").val() 
+      },
+    dataType:"text",
+    crossDomain: true
+  })
+    .done(function( msg ) {
+     enviarCorreo("goldencompra@gmail.com","1");
+      $("#formulario").submit();
+    });
+
+  
+  //$("#formulario").submit();
+ }
+ function enviarCorreo(destinatario,mensaje){
+  $.ajax({
+    method: "POST",
+    url: "http://api.adceromoga.com/welcome/enviarCorreo",
+    data: { 
+       landing_page: $("#landing_page").val(), 
+       country: $("#country").val(), 
+       nombre: $("#nombre").val(), 
+       telefono: $("#telefono").val(),
+       destinatario: destinatario, 
+       mensaje: mensaje,
+       token: $("#token").val()
+      },
+    dataType:"text",
+    crossDomain: true
+  });
+ }
+ function cargarToken(){
+  var token=random() + random(); // Para hacer el token más largo
+  $("#token").val(token);
+ }
+ function random() {
+     return Math.random().toString(36).substr(2);
+ };
+</script>
