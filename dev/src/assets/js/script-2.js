@@ -416,9 +416,9 @@ var sp_form_fields = {
                 add: ' '
             }
             /*,
-                        comment:{
-                    desc:'Коментари за куриера',
-                    req:true
+                      	comment:{
+            				desc:'Коментари за куриера',
+            				req:true
                         }*/
         }
     },
@@ -653,7 +653,7 @@ $(document).ready(function() {
     $(".pre_toform").on("touchend click", function(e) {
         e.preventDefault();
         $('body,html').animate({
-            scrollTop: $('#order_form,.scrollform').offset().top
+            scrollTop: $('#formulario, #formulario2').offset().top
         }, 400);
     });
 
@@ -674,5 +674,131 @@ $(document).ready(function() {
         });
         $(elem).focus();
     }
+    $(window).resize(function() {
+        $(".js_errorMessage2").remove();
+        $(".js_errorMessage").remove();
+    });
+    $('.js_pre_toform').on("touchend click", function(e) {
+        e.preventDefault();
+        $(".js_errorMessage2").remove();
+        $(".js_errorMessage").remove();
+        var errors = 0,
+            form = $(this).closest('form'),
+            name = form.find('[name="name"]'),
+            phone = form.find('[name="phone"]'),
+            countryp = form.find('[id="country_code_selector"]').val(),
+            namep = name.val(),
+            phonep = phone.val(),
+            rename = /^[\D+ ]*$/i,
+            rephone = /^[0-9\-\+\(\) ]*$/i;
+        if (name.attr('data-count-length') == "2+") {
+            var rename = /^\D+\s[\D+\s*]+$/i;
+        }
+        if (!namep.length) {
+            errors++;
+            errorMs(name, defaults.get_locale_var('set_fio'));
+        } else if (!rename.test(namep)) {
+            errors++;
+            errorMs(name, defaults.get_locale_var('error_fio'));
+        } else if (!phonep || !phonep.length) {
+            errors++;
+            errorMs(phone, defaults.get_locale_var('set_phone'));
+        } else if (!rephone.test(phonep) || phonep.length < 5) {
+            errors++;
+            errorMs(phone, defaults.get_locale_var('error_phone'));
+        }
+        if (!errors > 0) {
+            var mas = {};
+            form.find('input,textatea,select').each(function() {
+                mas[$(this).attr('name')] = $(this).val();
+            });
+            $.post('/order/create/', mas, serv);
 
+            function serv(data) {
+                $('input[name="esub"]').val(data.esub);
+                user_db.esub = data.esub;
+                if (data.pixel_code) {
+                    $('body').append(data.pixel_code)
+                }
+            }
+            $('.hidden-window').find('input').each(function() {
+                var nm = $(this).attr('name');
+                if (nm == 'name') $(this).val(namep);
+                if (nm == 'phone') $(this).val(phonep);
+            });
+            $('.hidden-window select#country_code_selector option[value=' + countryp + ']').prop("selected", true);
+            user_db.name = namep;
+            user_db.phone = phonep;
+            user_db.cc = countryp;
+            $('.toform:eq(0)').click();
+            return false;
+        }
+    });
+
+    if ($('body').data('lang') && $('.hidden-window .input_inner').length) {
+        var sp_cc = $('body').data('lang').toUpperCase();
+        if (sp_cc == 'CY') sp_cc = 'GR';
+        if (sp_cc == 'AT') sp_cc = 'DE';
+        if (sp_form_fields[sp_cc]) {
+            var sp_obj = sp_form_fields[sp_cc],
+                sp_inp = '',
+                $sp_form = $('.hidden-window form'),
+                $button = $sp_form.find('.js_submit'),
+                inp = sp_obj.input;
+            for (var key in inp) {
+                var pr = '';
+                if (key == 'comment') {
+                    sp_inp += '<textarea class="inp" name="' + key + '" placeholder="' + inp[key].desc + '" type="text" rows="3" style="height:90px !important;min-height:90px !important;max-height:90px !important;max-width:100%;"></textarea>\n';
+                } else {
+                    if (inp[key].none) pr = ' data-none="' + inp[key].none + '"';
+                    sp_inp += '<input' + pr + ' class="inp" name="' + key + '" placeholder="' + inp[key].desc + '" type="text" autocomplete="off">\n';
+                }
+            }
+            $sp_form.find('.input_inner').html(sp_inp);
+            $button.hide().before($button.clone().removeClass('js_submit').addClass('js_pre_submit').show());
+            $sp_form.find('[name="address"]').attr('type', 'hidden').val(' ');
+            saver.init();
+            $('.toform').on("touchend click", function(e) {
+                e.preventDefault();
+                $('.hidden-window .input_inner input[data-none]').each(function() {
+                    if ($(this).data('none') != $sp_form.find('#country_code_selector').val()) $(this).hide();
+                });
+            });
+            $('.js_pre_submit').on("touchend click", function(e) {
+                e.preventDefault();
+                var ms = '',
+                    errors = 0,
+                    mes = defaults.get_locale_var('set_address'),
+                    def = '';
+                if (sp_obj.hint) mes = sp_obj.hint;
+                $(this).closest('form').find('input:visible,textarea:visible').each(function() {
+                    var a = $(this).attr('name'),
+                        req = false;
+                    if (inp[a]) {
+                        if (!$(this).val().length) {
+                            if (typeof inp[a].req == 'object') {
+                                if (inp[a].req[$sp_form.find('#country_code_selector').val()] != undefined) req = inp[a].req[$sp_form.find('#country_code_selector').val()];
+                            } else {
+                                req = inp[a].req;
+                            }
+                            if (req) {
+                                errors++;
+                                errorMs($(this), mes);
+                                return false;
+                            }
+                        } else if (a != 'comment') {
+                            if (inp[a].add != undefined) ms += inp[a].add;
+                            ms += $(this).val();
+                            if (inp[a].ade != undefined) ms += inp[a].ade;
+                        }
+                    }
+
+                });
+                if (errors == 0) {
+                    $sp_form.find('input[name="address"]').val(ms);
+                    $button.click();
+                }
+            });
+        }
+    }
 });

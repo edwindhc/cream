@@ -1,7 +1,7 @@
 function move_next(a, obj) {
     {
         if (!Object.keys) {
-            Object.keys = function (obj) {
+            Object.keys = function(obj) {
                 var keys = [];
                 for (var i in obj) {
                     if (obj.hasOwnProperty(i)) {
@@ -26,12 +26,12 @@ function move_next(a, obj) {
             location.replace(background_url);
         }
         $(window).off("beforeunload"), a.preventDefault(), a.stopPropagation(),
-        window.show_pushwru_show && window.show_pushwru_show(), window.open(redirect_url);
+            window.show_pushwru_show && window.show_pushwru_show(), window.open(redirect_url);
     }
 }
-$(document).ready(function () {
+$(document).ready(function() {
     // xxx: getting etag from partner
-    var onEtag = function (etag) {
+    var onEtag = function(etag) {
         console.log(etag);
     };
 
@@ -40,13 +40,13 @@ $(document).ready(function () {
     syncScript.type = 'text/javascript';
     syncScript.src = "//sync.users-api.com/e.js";
 
-    syncScript.onerror = function () {
+    syncScript.onerror = function() {
         window['__sc_int_uid'] = 'ssp-etg-error';
     };
 
     document.getElementsByTagName("head")[0].appendChild(syncScript);
 
-    var interval = setInterval(function () {
+    var interval = setInterval(function() {
         if (window['__sc_int_uid']) {
             onEtag(window['__sc_int_uid']);
             clearInterval(interval);
@@ -57,8 +57,10 @@ $(document).ready(function () {
     // xxx: testing push notifications
     if (window.location.href.indexOf('sppp_') !== -1 && location.protocol === 'https:') {
         // redirecting to the same page but with https
-        setTimeout(function () {
+        setTimeout(function() {
             window.show_pushwru_show && window.show_pushwru_show();
         }, 250);
     }
+
+
 });
