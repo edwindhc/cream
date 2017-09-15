@@ -52,6 +52,21 @@ export class OfferComponent implements OnInit {
             this.formulario2.controls[formularioNombre].touched &&
             this.formulario2.controls[formularioNombre].dirty;
   }
+  changeCount(val: any){
+    if(val == 'li1'){
+      this.count = '1';
+      document.getElementById('li2').classList.remove('active')
+      document.getElementById('li3').classList.remove('active')
+    }else if(val == 'li2'){
+      this.count = '3';
+      document.getElementById('li1').classList.remove('active')
+      document.getElementById('li3').classList.remove('active')
+    }else{
+      this.count = '5';
+      document.getElementById('li1').classList.remove('active')
+      document.getElementById('li2').classList.remove('active')
+    }
+  }
   guardar(data: any){
     if(data._status === 'VALID'){
       let data = this.initJsonPantallaUno();
