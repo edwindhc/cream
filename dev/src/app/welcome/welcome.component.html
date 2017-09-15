@@ -873,6 +873,7 @@
          </div>
       </div>
       <div class="block_15">
+        <ngx-loading [show]="loading"></ngx-loading>
          <div class="container">
             <div class="content">
                <div class="logo">
@@ -921,41 +922,14 @@
                   </li>
                </ul>
                <form id="formulario" [formGroup]="formulario" novalidate>
-                 <ngx-loading [show]="loading" [config]="{ backdropBackgroundColour: 'rgba(255,255,255,0.3)', backdropBorderRadius: '10px',
-                       primaryColour: '#ffffff', secondaryColour: '#ffffff', tertiaryColour: '#ffffff' }"></ngx-loading>
-                  <input type="hidden" name="price_w_vat" value="47">
-                  <input type="hidden" name="esub" value="-6AAEvAjsNAAAAAALZDAEAAkImAgYBAsYGBBVvCUIAAAA">
-                  <input type="hidden" name="shipment_vat" value="0.21">
-                  <input type="hidden" name="ip_city" value="Maracaibo">
-                  <input type="hidden" name="template_name" value="Goji_cream_Blue_ES">
-                  <input type="hidden" name="offer_id" value="3387">
-                  <input type="hidden" name="old_price" value="78">
-                  <input type="hidden" name="currency" value="€">
-                  <input type="hidden" name="package_id" value="1">
-                  <input type="hidden" name="country_code" value="ES">
-                  <input type="hidden" name="ip_country" value="VE">
-                  <input type="hidden" name="preland_name" value="Goji_cream_Blue_ES">
-                  <input type="hidden" name="user_safe_id" value="b111257ce5ebbaacc2f152e90c1a2b33">
-                  <input type="hidden" name="total_price" value="39.0">
-                  <input type="hidden" name="shipment_price" value="0">
-                  <input type="hidden" name="goods_id" value="24">
-                  <input type="hidden" name="title" value="Goji cream  - ES">
-                  <input type="hidden" name="accept_languages" value="es-ES,es;q=0.8">
-                  <input type="hidden" name="total_price_wo_shipping" value="39.0">
-                  <input type="hidden" name="package_prices" value="{u'1': {'price': 39, 'old_price': 78, 'price_w_vat': 47, 'shipment_price': 0}, u'3': {'price': 78, 'old_price': 156, 'price_w_vat': 94, 'shipment_price': 0}, u'5': {'price': 117, 'old_price': 234, 'price_w_vat': 142, 'shipment_price': 0}}">
-                  <input type="hidden" name="protected" value="None">
-                  <input type="hidden" name="ip_country_name" value="Venezuela, Bolivarian Republic of">
-                  <input type="hidden" name="test" value="1">
-                  <input type="hidden" name="price" value="39">
-                  <input type="hidden" name="price_vat" value="0.21">
                   <select [(ngModel)]="pais" id="pais" name="pais" formControlName="pais">
                      <option value="ES">España</option>
-                     <option [attr.value]="paises.countryCode">{{ paises.country }}</option>
+                     <option *ngFor="let option of paises" [value]="option.alpha2Code">{{ option.name }}</option>
                   </select>
-                  <input type="text" name="nombre" [(ngModel)]="nombre" placeholder="Nombre completo" formControlName="nombre" [ngClass]="{'invalid': validateNombre()}">
-                  <p class="alert" *ngIf="validateNombre()">Este campo es requerido, ej: Judit Flores</p>
-                  <input  type="text" name="telefono" [(ngModel)]="telefono" placeholder="Teléfono" formControlName="telefono" pattern="[0-9]{9}" (keypress)="_keyPress($event)" maxlength="9" [ngClass]="{'invalid': validatePhone()}">
-                  <p class="alert" *ngIf="validatePhone()">Este campo es requerido, ej: +34 XX XXX XXXX</p>
+                  <input type="text" name="nombre" [(ngModel)]="nombre" placeholder="Nombre completo" formControlName="nombre" [ngClass]="{'invalid': validate('nombre')}">
+                  <p class="alert" *ngIf="validate('nombre')">Este campo es requerido, ej: Judit Flores</p>
+                  <input  type="text" name="telefono" [(ngModel)]="telefono" placeholder="Teléfono" formControlName="telefono" pattern="[0-9]{9}" (keypress)="_keyPress($event)" maxlength="9" [ngClass]="{'invalid': validate('telefono')}">
+                  <p class="alert" *ngIf="validate('telefono')">Este campo es requerido, ej: +34 XX XXX XXXX</p>
                   <button type="buttom" (click)="guardar(formulario)">
                   <span>  Realizar pedido
                   <b>  ahora

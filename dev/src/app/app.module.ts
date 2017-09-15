@@ -6,8 +6,7 @@ import { NgModule } from '@angular/core';
 import { GuardarDatosService } from './guardar-datos.service';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { TooltipModule } from "ngx-tooltip";
-import { LoadingModule } from 'ngx-loading';
+import { LoadingModule, ANIMATION_TYPES  } from 'ngx-loading';
 import { OfferComponent } from './offer/offer.component';
 
 const appRoutes: Routes = [
@@ -27,8 +26,14 @@ const appRoutes: Routes = [
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
-    TooltipModule,
-    LoadingModule,
+    LoadingModule.forRoot({
+        animationType: ANIMATION_TYPES.wanderingCubes,
+        backdropBackgroundColour: 'rgba(0,0,0,0.1)',
+        backdropBorderRadius: '4px',
+        primaryColour: '#ffffff',
+        secondaryColour: '#ffffff',
+        tertiaryColour: '#ffffff'
+    }),
     RouterModule.forRoot(appRoutes,{ useHash: true })
   ],
   providers: [GuardarDatosService],

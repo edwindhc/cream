@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GuardarDatosService } from '../guardar-datos.service';
 import { FormBuilder, FormGroup, Validators, FormControl  } from '@angular/forms';
-import {TooltipModule} from "ngx-tooltip";
 
 @Component({
   selector: 'app-welcome',
@@ -17,12 +16,10 @@ export class WelcomeComponent implements OnInit {
   public token: string = '';
   public email: string = "jeremyfys25@gmail.com";
   public mensajePantallaUno: string = "1";
-  public mensajePantallaDos: string = "2";
-  public landing: string = '';
-  public navigator: Navigator;
+  public landing: string = "Goji_cream_long_ES";
   public formulario: FormGroup;
   public loading = false;
-  public paises: any = {};
+  public paises: any;
 
   constructor(public formBuilder: FormBuilder,
               public service: GuardarDatosService,
@@ -33,29 +30,23 @@ export class WelcomeComponent implements OnInit {
           'telefono': ["", Validators.compose([Validators.required, Validators.pattern('[0-9]*')])],
         });
         this.pais = 'ES';
-
   }
   ngOnInit(){
+    localStorage.clear();
     this.service.buscarPais().subscribe(data => {
       this.paises = data
     }
   );
-
   }
-  validateNombre(): boolean {
-    return !this.formulario.controls['nombre'].valid && this.formulario.controls['nombre'].touched;
-  }
-  validatePhone(): boolean {
-    return !this.formulario.controls['telefono'].valid && this.formulario.controls['telefono'].touched;
+  validate(formularioNombre: string): boolean {
+    return !this.formulario.controls[formularioNombre].valid &&
+            this.formulario.controls[formularioNombre].touched &&
+            this.formulario.controls[formularioNombre].dirty;
   }
   guardar(data:any){
     if(data._status === 'VALID'){
-      let email = "jeremyfys25@gmail.com";
-      let mensajePantallaUno = "1";
       let data = this.initJsonPantallaUno();
       this.servicesPantallaUno(data);
-
-
     }else{
       for (let i in this.formulario.controls) {
         this.formulario.controls[i].markAsTouched();
@@ -66,22 +57,28 @@ export class WelcomeComponent implements OnInit {
   servicesPantallaUno(dataInit: any){
     let data = this.initJsonCorreo(this.mensajePantallaUno);
     this.loading = true;
+    let errorRequest = false;
     this.service.enviarDatosPantallaUno(dataInit).subscribe(
       response => {
+        console.log(response),
         this.loading = false
       },
       error => {
+        errorRequest = true,
         this.loading = false
       },
       () => {
-        this.loading = false,
-        this.servicesEnviarCorreo(data)
+        if(!errorRequest){
+          this.servicesEnviarCorreo(data)
+        }
+        this.loading = false
       });
   }
   servicesEnviarCorreo(data : any){
     this.loading = true;
     this.service.enviarCorreo(data).subscribe(
       response => {
+        console.log(response),
         this.loading = false
       },
       error => {
@@ -93,8 +90,8 @@ export class WelcomeComponent implements OnInit {
        });
   }
   initJsonPantallaUno() : any{
-    this.landing = "Goji_cream_long_ES";
     this.token = this.generateToken();
+    localStorage.setItem('t', this.token);
     let data = {
       landing_page: this.landing,
       country: this.pais,
@@ -105,8 +102,6 @@ export class WelcomeComponent implements OnInit {
     return data;
   }
   initJsonCorreo(mensaje: string) : any{
-    this.landing = "Goji_cream_long_ES";
-    this.token = this.generateToken();
     let data = {
       landing_page: this.landing,
       country: this.pais,

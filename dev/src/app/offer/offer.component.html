@@ -110,55 +110,29 @@
            </ul>
         </div>
         <div class="h-w-honesty h-w-ico h-w-hide-mob">TRANSACCIÓN SEGURA</div>
-        <div class="h-w-form h-w-decor-block" id="formulario2">
+        <div class="h-w-form h-w-decor-block" id="scrollForm">
            <p><b>INTRODUCE TUS DATOS </b> PARA HACER UN PEDIDO</p>
-           <form action="/order/create/" method="post">
-              <input type="hidden" name="price_w_vat" value="47">
-              <input type="hidden" name="esub" value="-6AAEvAjsNAAAAAALZDAEAAkImAgYBAsYGBBVvCUIAAAA">
-              <input type="hidden" name="shipment_vat" value="0.21">
-              <input type="hidden" name="ip_city" value="Maracaibo">
-              <input type="hidden" name="template_name" value="Goji_cream_Blue_ES">
-              <input type="hidden" name="offer_id" value="3387">
-              <input type="hidden" name="old_price" value="78">
-              <input type="hidden" name="currency" value="€">
-              <input type="hidden" name="package_id" value="1">
-              <input type="hidden" name="country_code" value="ES">
-              <input type="hidden" name="ip_country" value="VE">
-              <input type="hidden" name="preland_name" value="Goji_cream_Blue_ES">
-              <input type="hidden" name="user_safe_id" value="b111257ce5ebbaacc2f152e90c1a2b33">
-              <input type="hidden" name="total_price" value="39.0">
-              <input type="hidden" name="shipment_price" value="0">
-              <input type="hidden" name="goods_id" value="24">
-              <input type="hidden" name="title" value="Goji cream  - ES">
-              <input type="hidden" name="accept_languages" value="es-ES,es;q=0.8">
-              <input type="hidden" name="total_price_wo_shipping" value="39.0">
-              <input type="hidden" name="package_prices" value="{u'1': {'price': 39, 'old_price': 78, 'price_w_vat': 47, 'shipment_price': 0}, u'3': {'price': 78, 'old_price': 156, 'price_w_vat': 94, 'shipment_price': 0}, u'5': {'price': 117, 'old_price': 234, 'price_w_vat': 142, 'shipment_price': 0}}">
-              <input type="hidden" name="protected" value="None">
-              <input type="hidden" name="ip_country_name" value="Venezuela, Bolivarian Republic of">
-              <input type="hidden" name="test" value="1">
-              <input type="hidden" name="price" value="39">
-              <input type="hidden" name="price_vat" value="0.21">
-              <div class="h-w-select h-w-ico" style="display:none;">
-                 <select id="country_code_selector" name="country_code">
-                    <option value="ES">España</option>
-                 </select>
-              </div>
+           <form id="formulario2" [formGroup]="formulario2" novalidate>
+             <p class="hide alert" id="mensaje">Rellene todos los campos</p>
               <div class="h-w-select h-w-ico">
-                 <select class="change-package-selector" name="count_select">
+                 <select class="change-package-selector" [(ngModel)]="count" formControlName="count" name="count">
                     <option data-slide-index="0" value="1">1 paquete</option>
                     <option data-slide-index="1" selected="selected" value="3">2+1 paquetes</option>
                     <option data-slide-index="2" value="5">3+2 paquetes</option>
                  </select>
               </div>
-              <div style="display:none;">
-                 <input name="name" type="text"/>
-                 <input class="only_number" name="phone" type="text"/>
+              <div class="input_inner">
+                <input class="inp" [(ngModel)]="street" formControlName="street" name="street" placeholder="Calle" type="text" autocomplete="off" [ngClass]="{'invalid': validate('street')}">
+                <input class="inp" [(ngModel)]="house" formControlName="house" name="house" placeholder="Numero de casa" type="text" autocomplete="off" [ngClass]="{'invalid': validate('house')}">
+                <input class="inp" [(ngModel)]="entrance" formControlName="entrance" name="entrance" placeholder="Portal / Escalera" type="text" autocomplete="off" [ngClass]="{'invalid': validate('entrance')}">
+                <input class="inp" [(ngModel)]="floor" formControlName="floor" name="floor" placeholder="Planta" type="text" autocomplete="off" [ngClass]="{'invalid': validate('floor')}">
+                <input class="inp" [(ngModel)]="apartment" formControlName="apartment" name="apartment" placeholder="Puerta" type="text" autocomplete="off" [ngClass]="{'invalid': validate('apartment')}">
+                <input class="inp" [(ngModel)]="city" formControlName="city" name="city" placeholder="Ciudad" type="text" autocomplete="off" [ngClass]="{'invalid': validate('city')}">
+                <input class="inp" [(ngModel)]="postal_code" formControlName="postal_code" name="postal_code" placeholder="Codigo postal" type="text" autocomplete="off" [ngClass]="{'invalid': validate('postal_code')}">
+                <textarea class="inp textarea-style" [(ngModel)]="comment" formControlName="comment" name="comment" placeholder="Comentario para la mensajeria" type="text" rows="3" [ngClass]="{'invalid': validate('comment')}"></textarea>
               </div>
-              <input name="address" placeholder="introducir la dirección" type="text"/>
-              <div class="input_inner"></div>
-              <!--  -->
               <div class="h-w-text-total">Precio: <span><font class="js_full_price">78</font> €</span></div>
-              <button class="js_submit">PEDIR</button>
+                <button type="buttom" (click)="guardar(formulario2)">PEDIR</button>
            </form>
         </div>
         <div class="h-w-guarantee h-w-decor-block">

@@ -653,7 +653,7 @@ $(document).ready(function() {
     $(".pre_toform").on("touchend click", function(e) {
         e.preventDefault();
         $('body,html').animate({
-            scrollTop: $('#formulario, #formulario2').offset().top
+            scrollTop: $('#formulario, #scrollForm').offset().top
         }, 400);
     });
 

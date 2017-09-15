@@ -26,7 +26,7 @@ export class GuardarDatosService {
             .catch(this.handleErrorObservable)
   }
   buscarPais() :  Observable<Response>{
-      return this.http.get('http://ip-api.com/json')
+      return this.http.get('https://restcountries.eu/rest/v2/region/Americas?fields=name;alpha2Code')
             .map(res => res.json())
             .catch(this.handleErrorObservable);
   }
