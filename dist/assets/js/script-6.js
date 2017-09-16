@@ -17,7 +17,6 @@ if (/* window.location.href.indexOf('cbp_') != -1 && */ window.location.href.ind
     } else {
         // show_pushwru_show will be called on 2nd backpress
         var popup_tried = false;
-        console.log('popstate bind');
 
         // xxx: donot touch. without calling pushState the popstate binding will not work
         history.pushState({init: true}, "unused argument", "#init");
@@ -29,7 +28,6 @@ if (/* window.location.href.indexOf('cbp_') != -1 && */ window.location.href.ind
                 location.replace(location.href.replace('http', 'https'));
             } else {
                 history.pushState({init: true}, "unused argument", "#init");
-                console.log(e);
                 var res = true;
                 if (true /*!popup_tried*/) {
                     e.preventDefault();
