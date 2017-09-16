@@ -554,9 +554,6 @@ img {
 }
 .product-info-content { padding: 10px; }
 
-@media (max-width: 767px) {
-    .page-header-wrapper { height: auto !important; }
-}
 @media (min-width: 480px) {
     .links > li { width: 33.33%; }
 }
@@ -698,4 +695,8 @@ img[height="1"], img[width="1"] {
 }
 .h-w-shipment{
 	display:none;
+}
+@media (max-width: 767px) {
+    .page-header-wrapper { height: auto !important; }
+
 }

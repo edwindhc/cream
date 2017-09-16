@@ -32,6 +32,8 @@ export class WelcomeComponent implements OnInit {
         this.pais = 'ES';
   }
   ngOnInit(){
+    console.log(this.validateMobile())
+    console.log(this.validateDesktop())
     localStorage.clear();
     this.service.buscarPais().subscribe(data => {
       this.paises = data
@@ -42,6 +44,12 @@ export class WelcomeComponent implements OnInit {
     return !this.formulario.controls[formularioNombre].valid &&
             this.formulario.controls[formularioNombre].touched &&
             this.formulario.controls[formularioNombre].dirty;
+  }
+  validateMobile() : boolean{
+    return window.matchMedia("(max-width: 767px)").matches;
+  }
+  validateDesktop() : boolean{
+    return window.matchMedia("(min-width: 768px)").matches;
   }
   guardar(data:any){
     if(data._status === 'VALID'){
