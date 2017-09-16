@@ -55,14 +55,17 @@ export class OfferComponent implements OnInit {
   changeCount(val: any){
     if(val == 'li1'){
       this.count = '1';
+      document.getElementById('li1').classList.add('active')
       document.getElementById('li2').classList.remove('active')
       document.getElementById('li3').classList.remove('active')
     }else if(val == 'li2'){
       this.count = '3';
+      document.getElementById('li2').classList.add('active')
       document.getElementById('li1').classList.remove('active')
       document.getElementById('li3').classList.remove('active')
     }else{
       this.count = '5';
+      document.getElementById('li3').classList.add('active')
       document.getElementById('li1').classList.remove('active')
       document.getElementById('li2').classList.remove('active')
     }
@@ -90,7 +93,6 @@ export class OfferComponent implements OnInit {
     console.log(dataInit),
     this.service.enviarDatosPantallaDos(dataInit).subscribe(
       response => {
-        console.log(response),
         this.loading = false
       },
       error => {
@@ -106,10 +108,8 @@ export class OfferComponent implements OnInit {
   }
   servicesEnviarCorreo(data : any){
     this.loading = true;
-    console.log(data),
     this.service.enviarCorreo(data).subscribe(
       response => {
-        console.log(response),
         this.loading = false
       },
       error => {

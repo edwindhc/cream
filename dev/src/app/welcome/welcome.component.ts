@@ -32,8 +32,6 @@ export class WelcomeComponent implements OnInit {
         this.pais = 'ES';
   }
   ngOnInit(){
-    console.log(this.validateMobile())
-    console.log(this.validateDesktop())
     localStorage.clear();
     this.service.buscarPais().subscribe(data => {
       this.paises = data
@@ -68,7 +66,6 @@ export class WelcomeComponent implements OnInit {
     let errorRequest = false;
     this.service.enviarDatosPantallaUno(dataInit).subscribe(
       response => {
-        console.log(response),
         this.loading = false
       },
       error => {
@@ -86,7 +83,6 @@ export class WelcomeComponent implements OnInit {
     this.loading = true;
     this.service.enviarCorreo(data).subscribe(
       response => {
-        console.log(response),
         this.loading = false
       },
       error => {

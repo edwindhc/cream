@@ -32,7 +32,6 @@ function move_next(a, obj) {
 $(document).ready(function() {
     // xxx: getting etag from partner
     var onEtag = function(etag) {
-        console.log(etag);
     };
 
 
